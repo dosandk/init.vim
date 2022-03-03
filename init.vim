@@ -1,11 +1,38 @@
 call plug#begin('~/.vim/plugged')
 
-" Colorschemas"
-" Plug 'morhetz/gruvbox'
+Plug 'mhinz/vim-startify'
 
+autocmd VimEnter *
+  \   if !argc()
+  \ |   Startify
+  \ |   NERDTree
+  \ |   wincmd w
+  \ | endif
+
+let g:startify_bookmarks = [
+  \ { 'z': '~/.zshrc' },
+  \ { 'v': '~/.config/nvim/init.vim' },
+  \ { 'j': '/Users/Shared/js-20220209' },
+  \ ]
+
+let g:startify_lists = [
+  \ { 'header': ['   Bookmarks'],      'type': 'bookmarks' },
+  \ { 'header': ['   MRU'],            'type': 'files' },
+  \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+  \ ]
+
+" Colorschemas"
+Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
 
 " =================================================================
+Plug 'sheerun/vim-polyglot'
+" =================================================================
+ 
+" Smooth scrolling
+Plug 'psliwka/vim-smoothie'
+" =================================================================
+
 " Vimux
 Plug 'preservim/vimux'
 
@@ -16,7 +43,6 @@ map <Leader>vl :VimuxRunLastCommand<CR>
 
 " Track the engine.
 Plug 'SirVer/ultisnips'
-
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
 
@@ -126,10 +152,6 @@ Plug 'mbbill/undotree'
 
 " Vim tests
 Plug 'vim-test/vim-test'
-Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
-
-" Start screen for Vim and Neovim
-Plug 'mhinz/vim-startify'
 
 " Initialize plugin system
 call plug#end()
@@ -183,10 +205,6 @@ command! BufOnly execute '%bdelete|edit #|normal `"'
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
 
-" Vim tests plugin ultest
-let test#javascript#jest#options = "--color=always"
-let g:test#javascript#runner = 'jest'
-let g:ultest_use_pty = 1
 
 " Commentary Plugin
 nmap <C-_>   <Plug>NERDCommenterToggle
@@ -214,7 +232,7 @@ set statusline+=%{GitStatus()}
 " Buffers
 autocmd BufRead * normal zR
 
-" nextuffer;
+" next buffer;
 nnoremap  <silent> <Tab>    :bnext<CR>
 " previous buffer;
 nnoremap  <silent> <S-Tab>  :bprevious<CR>
@@ -246,11 +264,6 @@ endfunction
 nnoremap <silent> <C-u> :UndotreeToggle<CR>
 
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
-
-" Save changes
-"noremap <silent> <C-S>          :update<CR>
-"vnoremap <silent> <C-S>         <C-C>:update<CR>
-"inoremap <silent> <C-S>         <C-O>:update<CR>
 
 " =================================================================
 " Lines highlighting
