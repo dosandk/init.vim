@@ -21,9 +21,17 @@ let g:startify_lists = [
   \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
   \ ]
 
+" Edit vimr configuration file
+nnoremap <Leader>ve :e ~/.config/nvim/init.vim<CR>
+" " Reload vimr configuration file
+nnoremap <Leader>vr :source ~/.config/nvim/init.vim<CR>
+
 " Colorschemas"
 Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
+
+" Colors for CSS
+Plug 'ap/vim-css-color'
 
 " =================================================================
 Plug 'sheerun/vim-polyglot'
@@ -85,15 +93,20 @@ Plug 'rbong/vim-flog'
 Plug 'tpope/vim-fugitive'
 Plug 'kdheepak/lazygit.nvim'
 
+set diffopt+=vertical
+
 nmap <leader>gs :G<CR>
 nmap <leader>gd :Gvdiffsplit<CR>
 nmap <leader>gp :Git push<CR>
+nmap <leader>g> :diffget //2<CR>
+nmap <leader>g< :diffget //3<CR>
+
 " =================================================================
 
 " Autocomplite
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " list of CoC extensions needed
-let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-snippets']
+let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets']
 
 "this will auto close ( [ {
 Plug 'jiangmiao/auto-pairs'
