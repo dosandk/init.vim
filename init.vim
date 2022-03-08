@@ -54,17 +54,7 @@ Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
 
-" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
-" - https://github.com/Valloric/YouCompleteMe
-" - https://github.com/nvim-lua/completion-nvim
-"let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
 let g:UltiSnipsSnippetDirectories=["my-snippets"]
-" If you want :UltiSnipsEdit to split your window.
-"let g:UltiSnipsEditSplit="vertical"" Vimux
-
 
 " =================================================================
 
@@ -155,6 +145,12 @@ endfunction
 
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" =================================================================
+
 "this will auto close ( [ {
 Plug 'jiangmiao/auto-pairs'
 
@@ -187,9 +183,17 @@ nnoremap <silent> <Leader>h/ :History/<CR>
 
 " =================================================================
 " Navigation
-Plug 'easymotion/vim-easymotion'
+Plug 'unblevable/quick-scope'
 
-map <Leader>j <Plug>(easymotion-prefix)
+" WARNING: Put it before colorscheme option
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+augroup END
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 " =================================================================
 
 " Airline
@@ -216,11 +220,13 @@ Plug 'vim-test/vim-test'
 " Initialize plugin system
 call plug#end()
 
+" Remap leader 
 let g:delimitMate_expand_cr = 1
 noremap <Space> <Nop> 
 map <Space> <Leader>
 
-" Initialize gruvbox theme
+
+" Initialize theme
 " colorscheme gruvbox
 colorscheme solarized
 
@@ -280,9 +286,9 @@ set statusline+=%{GitStatus()}
 autocmd BufRead * normal zR
 
 " next buffer;
-nnoremap  <leader><Tab> :bnext<CR>
+nnoremap  <Tab> :bnext<CR>
 " previous buffer;
-nnoremap  <leader><S-Tab> :bprevious<CR>
+nnoremap  <S-Tab> :bprevious<CR>
 
 " =================================================================
  
@@ -312,21 +318,6 @@ nnoremap <silent> <C-u> :UndotreeToggle<CR>
 
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 
-" =================================================================
-" Lines highlighting
-" nnoremap <leader>l :call matchadd('LineHighlight', '\%'.line('.').'l')<cr>
-
-" highlight LineHighlight ctermbg=8 guibg=#000000
-" vnoremap <leader>l :<c-u>call HiglightVisualLines()
-" nnoremap <leader>c :call clearmatches()
-
-" HiglightVisualLines()
-" loop throough visually selected lines and give them highlighting
-" function! HiglightVisualLines()
-"    for i in range(line('v'),line("'>"))
-"        call matchadd('LineHighlight', '\%'.i.'l')
-"    endfor
-" endfunction
 " =================================================================
 
 nmap <silent> t<C-n> :TestNearest<CR>
