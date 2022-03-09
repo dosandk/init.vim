@@ -216,6 +216,10 @@ Plug 'mbbill/undotree'
 
 " Vim tests
 Plug 'vim-test/vim-test'
+Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
+
+let test#javascript#jest#options = "--color=always"
+let g:ultest_use_pty = 1
 
 " Initialize plugin system
 call plug#end()
@@ -243,6 +247,7 @@ set mouse=a
 set tabstop=8
 set shiftwidth=2
 set softtabstop=2
+set expandtab
 set number
 set hidden
 set nowrap
