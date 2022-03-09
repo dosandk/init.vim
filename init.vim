@@ -17,6 +17,7 @@ let g:startify_bookmarks = [
 
 let g:startify_lists = [
   \ { 'header': ['   Bookmarks'],      'type': 'bookmarks' },
+  \ { 'header': ['   Sessions'],      'type': 'sessions' },
   \ { 'header': ['   MRU'],            'type': 'files' },
   \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
   \ ]
@@ -36,7 +37,11 @@ Plug 'ap/vim-css-color'
 " =================================================================
 Plug 'sheerun/vim-polyglot'
 " =================================================================
- 
+
+" Vim Clipboard history
+Plug 'junegunn/vim-peekaboo'
+
+" =================================================================
 " Smooth scrolling
 Plug 'psliwka/vim-smoothie'
 " =================================================================
@@ -97,6 +102,7 @@ nmap <leader>g< :diffget //3<CR>
 
 " Autocomplite
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 " list of CoC extensions needed
 let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets']
 
@@ -170,6 +176,8 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
+command! -nargs=* W w
+
 nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <C-f> :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
@@ -218,6 +226,7 @@ Plug 'mbbill/undotree'
 Plug 'vim-test/vim-test'
 Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 
+let g:test#javascript#runner = 'jest'
 let test#javascript#jest#options = "--color=always"
 let g:ultest_use_pty = 1
 
@@ -228,7 +237,6 @@ call plug#end()
 let g:delimitMate_expand_cr = 1
 noremap <Space> <Nop> 
 map <Space> <Leader>
-
 
 " Initialize theme
 " colorscheme gruvbox
@@ -272,7 +280,7 @@ command! BufOnly execute '%bdelete|edit #|normal `"'
 let g:airline#extensions#tabline#fnamemod = ':t'
 
 " Commentary Plugin
-nmap <C-_>   <Plug>NERDCommenterToggle
+nmap <C-_>   <Plug>NERDCommenterToggle<CR>
 vmap <C-_>   <Plug>NERDCommenterToggle<CR>gv
 
 " Start NERDTree. If a file is specified, move the cursor to its window.
