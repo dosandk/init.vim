@@ -219,6 +219,9 @@ Plug 'mattn/emmet-vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_conceal = 0
+
 " Undo plugin
 Plug 'mbbill/undotree'
 
@@ -230,6 +233,13 @@ let g:test#javascript#runner = 'jest'
 let test#javascript#jest#options = "--color=always"
 let g:ultest_use_pty = 1
 
+" Indent plugin
+Plug 'Yggdroot/indentLine'
+
+set list
+set lcs=tab:»_,trail:·
+highlight SpecialKey ctermfg=8 guifg=DimGrey
+
 " Initialize plugin system
 call plug#end()
 
@@ -239,7 +249,7 @@ noremap <Space> <Nop>
 map <Space> <Leader>
 
 " Initialize theme
-" colorscheme gruvbox
+"colorscheme gruvbox
 colorscheme solarized
 
 set ttyfast
