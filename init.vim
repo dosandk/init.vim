@@ -38,6 +38,22 @@ Plug 'ap/vim-css-color'
 Plug 'sheerun/vim-polyglot'
 " =================================================================
 
+Plug 'vim-syntastic/syntastic'
+
+let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+
+" =================================================================
 " Vim Clipboard history
 Plug 'junegunn/vim-peekaboo'
 
@@ -104,7 +120,7 @@ nmap <leader>g< :diffget //3<CR>
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " list of CoC extensions needed
-let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets']
+let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets', 'coc-emmet']
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
@@ -215,6 +231,9 @@ Plug 'editorconfig/editorconfig-vim'
 " HTML
 Plug 'mattn/emmet-vim'
 
+let g:user_emmet_install_global=0
+autocmd FileType html,css,jsx EmmetInstall
+
 " Markdown
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
@@ -247,6 +266,9 @@ call plug#end()
 let g:delimitMate_expand_cr = 1
 noremap <Space> <Nop> 
 map <Space> <Leader>
+
+" Map quit from buffer
+map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Initialize theme
 "colorscheme gruvbox
