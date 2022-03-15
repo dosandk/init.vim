@@ -41,10 +41,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'vim-syntastic/syntastic'
 
 let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -58,8 +54,9 @@ Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'junegunn/vim-peekaboo'
 
 " =================================================================
-" Smooth scrolling
-Plug 'psliwka/vim-smoothie'
+
+Plug 'vifm/vifm.vim'
+
 " =================================================================
 
 " Vimux
@@ -101,10 +98,11 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 
 " =================================================================
 " Git plugins
-Plug 'airblade/vim-gitgutter'
+"Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'rbong/vim-flog'
 Plug 'tpope/vim-fugitive'
-Plug 'kdheepak/lazygit.nvim'
+"Plug 'kdheepak/lazygit.nvim'
 
 set diffopt+=vertical
 
@@ -114,22 +112,19 @@ nmap <leader>gp :Git push<CR>
 nmap <leader>g> :diffget //2<CR>
 nmap <leader>g< :diffget //3<CR>
 
+nmap <C-d> :DiffviewOpen<CR>
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'sindrets/diffview.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+
 " =================================================================
 
 " Autocomplite
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " list of CoC extensions needed
-let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets', 'coc-emmet']
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets', 'coc-emmet', 'coc-pairs']
 
 let g:UltiSnipsExpandTrigger='<Nop>'
 " Use tab for trigger completion with characters ahead and navigate.
@@ -174,10 +169,9 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 " =================================================================
 
 "this will auto close ( [ {
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 
 " =================================================================
-
 " Comments
 Plug 'preservim/nerdcommenter' 
 
@@ -221,7 +215,13 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " =================================================================
 
 " Airline
-Plug 'vim-airline/vim-airline'
+ Plug 'vim-airline/vim-airline'
+
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
 
 " =================================================================
  
@@ -259,10 +259,57 @@ set list
 set lcs=tab:»_,trail:·
 highlight SpecialKey ctermfg=8 guifg=DimGrey
 
+" Tagbar
+Plug 'preservim/tagbar'
+nmap <leader>t :TagbarToggle<CR>
+
+" Jump to location
+Plug 'justinmk/vim-sneak'
+
+nmap <leader>g <Plug>Sneak_s
+nmap <leader>G <Plug>Sneak_S
+
+" Surround
+Plug 'tpope/vim-surround'
+
 " Initialize plugin system
 call plug#end()
 
-" Remap leader 
+lua << EOS
+require('gitsigns').setup{
+  on_attach = function(bufnr)
+    local function map(mode, lhs, rhs, opts)
+        opts = vim.tbl_extend('force', {noremap = true, silent = true}, opts or {})
+        vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+    map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+
+    -- Actions
+    map('n', '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    map('v', '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    map('n', '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    map('v', '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    map('n', '<leader>hS', '<cmd>Gitsigns stage_buffer<CR>')
+    map('n', '<leader>hu', '<cmd>Gitsigns undo_stage_hunk<CR>')
+    map('n', '<leader>hR', '<cmd>Gitsigns reset_buffer<CR>')
+    map('n', '<leader>hp', '<cmd>Gitsigns preview_hunk<CR>')
+    map('n', '<leader>hb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>')
+    map('n', '<leader>tb', '<cmd>Gitsigns toggle_current_line_blame<CR>')
+    map('n', '<leader>hd', '<cmd>Gitsigns diffthis<CR>')
+    map('n', '<leader>hD', '<cmd>lua require"gitsigns".diffthis("~")<CR>')
+    map('n', '<leader>td', '<cmd>Gitsigns toggle_deleted<CR>')
+
+    -- Text object
+    map('o', 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+    map('x', 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+}
+EOS
+
+" Remap leader
 let g:delimitMate_expand_cr = 1
 noremap <Space> <Nop> 
 map <Space> <Leader>
@@ -271,12 +318,12 @@ map <Space> <Leader>
 map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Initialize theme
-"colorscheme gruvbox
+" colorscheme gruvbox
 colorscheme solarized
 
 set ttyfast
 set cursorline
-set updatetime=120
+set updatetime=100
 set colorcolumn=120
 set number
 set encoding=utf-8
@@ -302,14 +349,7 @@ set nobackup
 " share clipboard across vim sessions
 set clipboard=unnamed
 
-" Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-
 command! BufOnly execute '%bdelete|edit #|normal `"'
-
-" Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
 
 " Commentary Plugin
 nmap <C-_>   <Plug>NERDCommenterToggle<CR>
@@ -319,12 +359,12 @@ vmap <C-_>   <Plug>NERDCommenterToggle<CR>gv
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
 
-function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
-endfunction
+"function! GitStatus()
+  "let [a,m,r] = GitGutterGetHunkSummary()
+  "return printf('+%d ~%d -%d', a, m, r)
+"endfunction
 
-set statusline+=%{GitStatus()}
+"set statusline+=%{GitStatus()}
 
 " =================================================================
 " Buffers
