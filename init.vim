@@ -30,6 +30,8 @@ nnoremap <Leader>vr :source ~/.config/nvim/init.vim<CR>
 " Colorschemas"
 Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Colors for CSS
 Plug 'ap/vim-css-color'
@@ -175,11 +177,14 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 " Comments
 Plug 'preservim/nerdcommenter' 
 
-" these two plugins will add highlighting and indenting to JSX and TSX files.
-Plug 'yuezk/vim-js'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'maxmellon/vim-jsx-pretty'
+"Plug 'yuezk/vim-js'
+"Plug 'HerringtonDarkholme/yats.vim'
 
+" JavaScript
+Plug 'jonsmithers/vim-html-template-literals'
+let g:htl_all_templates = 1
+Plug 'pangloss/vim-javascript'
+Plug 'maxmellon/vim-jsx-pretty'
 " =================================================================
  
 " PLUGIN: FZF
@@ -236,10 +241,16 @@ autocmd FileType html,css,jsx EmmetInstall
 
 " Markdown
 Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
 
+Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_conceal = 0
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+
+Plug 'ferrine/md-img-paste.vim'
+let g:mdip_imgdir = '.'
+autocmd FileType markdown nmap <buffer><silent> <leader>i :call mdip#MarkdownClipboardImage()<CR>
 
 " Undo plugin
 Plug 'mbbill/undotree'
@@ -318,8 +329,9 @@ map <Space> <Leader>
 map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Initialize theme
-" colorscheme gruvbox
-colorscheme solarized
+colorscheme gruvbox
+"colorscheme tokyonight
+"colorscheme tokyonight
 
 set ttyfast
 set cursorline
@@ -427,3 +439,11 @@ endif
 :autocmd InsertEnter * set cul
 :autocmd InsertLeave * set nocul
 
+
+" terminal
+"tnoremap <leader><Esc> <C-\><C-n>:q!<CR>
+"nmap <leader>ls <Plug>NERDCommenterToggle<CR>
+
+nmap <leader>tt :term<CR>
+nmap <leader>tp :term live-server %:p:h
+tnoremap <Esc> <C-\><C-n>:q!<CR>
