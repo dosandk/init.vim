@@ -126,7 +126,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " list of CoC extensions needed
-let g:coc_global_extensions =  ['coc-eslint', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets', 'coc-emmet', 'coc-pairs']
+let g:coc_global_extensions =  ['coc-eslint', 'coc-prettier', 'coc-css', 'coc-html', 'coc-json', 'coc-snippets', 'coc-emmet', 'coc-pairs']
+
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 
 let g:UltiSnipsExpandTrigger='<Nop>'
 " Use tab for trigger completion with characters ahead and navigate.
@@ -286,8 +288,16 @@ Plug 'tpope/vim-surround'
 " Initialize plugin system
 call plug#end()
 
+" https://github.com/folke/tokyonight.nvim/issues/14
 lua << EOS
 require('gitsigns').setup{
+  signs = {
+    add = {hl = "DiffAdd", numhl = "GitSignsAddNr"},
+    change = {hl = "DiffChange", numhl = "GitSignsChangeNr"},
+    delete = {hl = "DiffDelete", numhl = "GitSignsDeleteNr"},
+    topdelete = {hl = "DiffDelete", numhl = "GitSignsDeleteNr"},
+    changedelete = {hl = "DiffChange", numhl = "GitSignsChangeNr"}
+  },
   on_attach = function(bufnr)
     local function map(mode, lhs, rhs, opts)
         opts = vim.tbl_extend('force', {noremap = true, silent = true}, opts or {})
@@ -358,6 +368,7 @@ set foldmethod=indent
 set smartcase 
 set noswapfile
 set nobackup
+set termguicolors
 " share clipboard across vim sessions
 set clipboard=unnamed
 
@@ -447,3 +458,8 @@ endif
 nmap <leader>tt :term<CR>
 nmap <leader>tp :term live-server %:p:h
 tnoremap <Esc> <C-\><C-n>:q!<CR>
+
+highlight DiffAdd guifg=NONE guibg=#4b5632
+highlight DiffDelete  guifg=NONE guibg=#453028
+highlight DiffChange  guifg=NONE guibg=#385570
+highlight DiffText    guifg=NONE guibg=#557A9E
