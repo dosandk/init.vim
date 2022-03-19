@@ -39,6 +39,8 @@ Plug 'ap/vim-css-color'
 " =================================================================
 Plug 'sheerun/vim-polyglot'
 " =================================================================
+Plug 'sunjon/shade.nvim'
+" =================================================================
 
 Plug 'vim-syntastic/syntastic'
 
@@ -330,6 +332,18 @@ require('gitsigns').setup{
 }
 EOS
 
+lua << EOS
+require'shade'.setup({
+  overlay_opacity = 50,
+  opacity_step = 1,
+  keys = {
+    brightness_up    = '<C-Up>',
+    brightness_down  = '<C-Down>',
+    toggle           = '<Leader>s',
+  }
+})
+EOS
+
 " Remap leader
 let g:delimitMate_expand_cr = 1
 noremap <Space> <Nop> 
@@ -449,11 +463,6 @@ else
 endif
 :autocmd InsertEnter * set cul
 :autocmd InsertLeave * set nocul
-
-
-" terminal
-"tnoremap <leader><Esc> <C-\><C-n>:q!<CR>
-"nmap <leader>ls <Plug>NERDCommenterToggle<CR>
 
 nmap <leader>tt :term<CR>
 nmap <leader>tp :term live-server %:p:h
