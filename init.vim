@@ -202,7 +202,7 @@ nnoremap <silent> <C-f> :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>/ :BLines<CR>
 nnoremap <silent> <Leader>' :Marks<CR>
-nnoremap <silent> <Leader>g :Commits<CR>
+nnoremap <silent> <Leader>c :Commits<CR>
 nnoremap <silent> <Leader>H :Helptags<CR>
 nnoremap <silent> <Leader>hh :History<CR>
 nnoremap <silent> <Leader>h: :History:<CR>
@@ -257,7 +257,12 @@ let g:mdip_imgdir = '.'
 autocmd FileType markdown nmap <buffer><silent> <leader>i :call mdip#MarkdownClipboardImage()<CR>
 
 " Undo plugin
-Plug 'mbbill/undotree'
+"Plug 'mbbill/undotree'
+Plug 'simnalamburt/vim-mundo'
+nnoremap <silent> <C-u> :MundoToggle<CR>
+
+Plug 'machakann/vim-highlightedyank'  " Highlight yanks
+let g:highlightedyank_highlight_duration = 1000
 
 " Vim tests
 Plug 'vim-test/vim-test'
@@ -362,12 +367,20 @@ set cursorline
 set updatetime=100
 set colorcolumn=120
 set number
+
 set encoding=utf-8
+set fileencoding=utf-8
+set termencoding=utf-8
+"set keymap=russian-jcukenwin
+"set iminsert=0
+"set imsearch=0
+"highlight lCursor guifg=NONE guibg=Cyan
+
 set spell spelllang=en_us
 set mouse=a
 
 " Identation settings
-set tabstop=8
+set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
@@ -379,12 +392,22 @@ set signcolumn=yes
 set nofoldenable
 set foldlevelstart=99
 set foldmethod=indent
-set smartcase 
+set ignorecase          " Ignore case in searches by default
+set smartcase  " But make it case sensitive if an uppercase is entered
 set noswapfile
 set nobackup
 set termguicolors
 " share clipboard across vim sessions
 set clipboard=unnamed
+" disable continuation of comments to the next line
+set formatoptions-=cro
+
+" Enable persistent undo so that undo history persists across vim sessions
+set undofile
+set undodir=~/.config/nvim/undo
+
+" highlight last inserted text
+nnoremap gV `[v`]
 
 command! BufOnly execute '%bdelete|edit #|normal `"'
 
@@ -415,29 +438,27 @@ nnoremap  <S-Tab> :bprevious<CR>
 " =================================================================
  
 " Windows
-"map <silent> <C-h> :call WinMove('h')<CR>
-"map <silent> <C-j> :call WinMove('j')<CR>
-"map <silent> <C-k> :call WinMove('k')<CR>
-"map <silent> <C-l> :call WinMove('l')<CR>
+map <silent> <C-h> :call WinMove('h')<CR>
+map <silent> <C-j> :call WinMove('j')<CR>
+map <silent> <C-k> :call WinMove('k')<CR>
+map <silent> <C-l> :call WinMove('l')<CR>
 
-"function! WinMove(key)
-"  let t:curwin = winnr()
-"  exec "wincmd ".a:key
-"  if (t:curwin == winnr())
-"    if(match(a:key, '[jk]'))
-"      wincmd v
-"    else
-"      wincmd s
-"    endif
-"    exec "wincmd ".a:key
-"  endif
-"endfunction
-	
+function! WinMove(key)
+  let t:curwin = winnr()
+  exec "wincmd ".a:key
+  if (t:curwin == winnr())
+    if(match(a:key, '[jk]'))
+      wincmd v
+    else
+      wincmd s
+    endif
+    exec "wincmd ".a:key
+  endif
+endfunction
 " =================================================================
  
 " mbbill/undotree
-nnoremap <silent> <C-u> :UndotreeToggle<CR>
-
+"nnoremap <silent> <C-u> :UndotreeToggle<CR>
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 
 " =================================================================
@@ -472,3 +493,15 @@ highlight DiffAdd guifg=NONE guibg=#4b5632
 highlight DiffDelete  guifg=NONE guibg=#453028
 highlight DiffChange  guifg=NONE guibg=#385570
 highlight DiffText    guifg=NONE guibg=#557A9E
+
+" comments in vimrc start with "
+" in normal mode
+nnoremap <Left>  : echoe "Use h" <CR>
+nnoremap <Right> : echoe "Use l" <CR>
+nnoremap <Up>    : echoe "Use k" <CR>
+nnoremap <Down>  : echoe "Use j" <CR>
+" in insert mode
+"inoremap <Left>  : echoe "Use h" <CR>
+"inoremap <Right> : echoe "Use l" <CR>
+"inoremap <Up>    : echoe "Use k" <CR>
+"inoremap <Down>  : echoe "Use j" <CR>
